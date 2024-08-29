@@ -51,11 +51,11 @@ jobs:
       #
       # GitHub pages deployment
       #
-      - name: Collect artifacts for deployment
-        run: |
-          cd $GITHUB_WORKSPACE
-          cp -R $GITHUB_WORKSPACE/Organometallics_WebDemo .
-          cd Organometallics_WebDemo
+      # - name: Collect artifacts for deployment
+      #   run: |
+      #     cd $GITHUB_WORKSPACE
+      #     cp -R $GITHUB_WORKSPACE/Organometallics_WebDemo .
+      #     cd Organometallics_WebDemo
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
