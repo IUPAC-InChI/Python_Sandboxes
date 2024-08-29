@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style type="text/css"> 
+            textarea {
+              width: 100%;
+              height: 700px;
+              padding: 12px 20px;
+              box-sizing: border-box;
+              border: 2px solid #ccc;
+              border-radius: 4px;
+              background-color: #f8f8f8;
+              font-size: 16px;
+              resize: none;
+            }
+            .tg  {border-collapse:collapse;border-spacing:0;}
+            .tg td{border-style:none;border-width:1px;font-family:Arial, sans-serif;font-size:14px; 
+                overflow:hidden;padding:10px 5px;word-break:normal;}
+            .tg th{border-color:black;border-style:none;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+                font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+            .tg .tg-c3ow{border-color:inherit;text-align:center;vertical-align:top}
+            .tg .tg-0pky{font-weight:bold; border-color:inherit;text-align:middle;vertical-align:top}
+            .tg .tg-0lax{text-align:left;vertical-align:top}
+        </style>
+        <title>Organometallics Prototype</title>
+        <script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
+        <script src="https://cdn.plot.ly/plotly-2.30.0.min.js" charset="utf-8"></script>
+        <link rel="icon" type="image/x-icon" href="/images/InChI-logo2.png">
+    </head>
+    <body >
+        <noscript>You need to enable JavaScript!</noscript>
+        <h1>Organometallics Prototype</h1>
+        <h2>Work in progress: results and structural representations may be incorrect!</h2>
+
+        <form>
+            <table class="tg" style="width: 100%" >
+                <colgroup>
+                    <col style="width: 35%">
+                    <col style="width: 20%">
+                    <col style="width: 45%">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="tg-0pky">MOLfile</th>
+                        <th class="tg-0pky">Structures</th>
+                        <th class="tg-0pky">InChI</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="tg-0pky" rowspan="2">
+                            <textarea id="input"></textarea>
+                        </td>
+                        <td class="tg-0pky" style="text-align: center; vertical-align: top;">
+                            <div id="original_image"></div>
+                        </td>
+                        <td class="tg-0pky" style="text-align: center; vertical-align: middle;">
+                            <label style="white-space: pre-wrap" id="original_inchi"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        
+                        <td class="tg-0pky" style="text-align: center; vertical-align: top;">
+                            <div id="disconnected_image"></div>
+                        </td>
+                        <td class="tg-0pky"  style="text-align: center; vertical-align: middle;">
+                            <label style="white-space: pre-wrap" id="disconnected_inchi"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tg-0pky" >
+                            <button type="button" id="btnInput" onclick="submitInput()">
+                                Submit
+                            </button>
+                            <button type="button" id="btnClear" onclick="clearForm()">
+                                Clear
+                            </button>
+                        </td>
+                        <td>
+                            <label id="statusText"></label>
+                        </td>
+                        <td class="tg-0pky" style="text-align: center; vertical-align: top;">
+                            <label id="inchiCompare"></label>
+                        </td>
+                    </tr>
+                </tbody>
+                
+            </table>  
+        </form>
+
+        <script src="index.js"></script>
+    </body>
+</html>
