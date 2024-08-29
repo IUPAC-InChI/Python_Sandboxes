@@ -1,0 +1,71 @@
+name: Test WASM build, prepare web application and deploy to GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  test_and_ploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup emsdk
+        uses: mymindstorm/setup-emsdk@v13
+        with:
+          version: 3.1.43
+          actions-cache-folder: 'emsdk-cache'
+
+      - name: Verify emsdk
+        run: |
+          node -v
+      
+      - name: Verify Node.js version
+        run: |
+          node -v
+
+      - name: Checkout this repository
+        uses: actions/checkout@v4
+        with:
+          path: './Organometallics_WebDemo'
+
+      #
+      # JQuery
+      #
+      - name: Download JQuery
+        run: |
+          cd $GITHUB_WORKSPACE
+          wget -P jquery https://code.jquery.com/jquery-3.7.1.min.js
+
+      #
+      # GitHub pages deployment
+      #
+      - name: Collect artifacts for deployment
+        run: |
+          cd $GITHUB_WORKSPACE
+          cp -R $GITHUB_WORKSPACE/Organometallics_WebDemo .
+          cd Organometallics_WebDemo
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{github.workspace}}
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+          
