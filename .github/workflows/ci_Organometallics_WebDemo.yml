@@ -64,7 +64,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           # path: ${{github.workspace}}
-          path: $GITHUB_WORKSPACE/Organometallics_WebDemo
+          path: './Organometallics_WebDemo'
 
       - name: Deploy to GitHub Pages
         id: deployment
