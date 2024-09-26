@@ -1,4 +1,4 @@
-name: Test WASM build, prepare web application and deploy to GitHub Pages
+name: Prepare web application and deploy to GitHub Pages
 
 on:
   push:
@@ -15,12 +15,17 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test_and_ploy:
+  pages_deployment:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout this repository
+        uses: actions/checkout@v4
+        with:
+          path: './Python_Sandboxes'
+
       - name: Setup emsdk
         uses: mymindstorm/setup-emsdk@v13
         with:
@@ -29,33 +34,27 @@ jobs:
 
       - name: Verify emsdk
         run: |
-          node -v
-      
-      - name: Verify Node.js version
-        run: |
-          node -v
+          emcc -v
 
-      - name: Checkout this repository
+      #
+      # Compile InChI shared library
+      #
+      - name: Checkout v1.07 from InChI repository
         uses: actions/checkout@v4
         with:
-          path: './Organometallics_WebDemo'
+          path: './InChI_1_07'
+          repository: 'IUPAC-InChI/InChI'
+          ref: 'v1.07.1'
 
-      #
-      # JQuery
-      #
-      - name: Download JQuery
+      - name: Compile INCHI_API with emcc
+        # Creates libinchi.so.1.07 in $GITHUB_WORKSPACE/InChI_1_07/INCHI-1-SRC/INCHI_API/bin/Linux
         run: |
-          cd $GITHUB_WORKSPACE
-          wget -P jquery https://code.jquery.com/jquery-3.7.1.min.js
+          cd $GITHUB_WORKSPACE/InChI_1_07/INCHI-1-SRC/INCHI_API/libinchi/gcc
+          make -j C_COMPILER=emcc SHARED_LINK="emcc -s SIDE_MODULE=1"
 
-      #
-      # GitHub pages deployment
-      #
-      # - name: Collect artifacts for deployment
-      #   run: |
-      #     cd $GITHUB_WORKSPACE
-      #     cp -R $GITHUB_WORKSPACE/Organometallics_WebDemo .
-      #     cd Organometallics_WebDemo
+      - name: Copy libinchi.so
+        run: |
+          cp $GITHUB_WORKSPACE/InChI_1_07/INCHI-1-SRC/INCHI_API/bin/Linux/libinchi.so.1.07 $GITHUB_WORKSPACE/Python_Sandboxes/Organometallics_WebDemo/libinchi.so
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -63,10 +62,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # path: ${{github.workspace}}
-          path: './Organometallics_WebDemo'
+          path: ${{github.workspace}}/Python_Sandboxes
 
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-          
