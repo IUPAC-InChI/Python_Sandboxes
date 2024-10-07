@@ -40,7 +40,7 @@ def disconnect_bonds(mol):
 
 def get_inchi_string(mol, inchi_api):
     molfile = graph_to_molfile(mol)
-    inchi_options = "/RecMet"
+    inchi_options = "-RecMet"
     show_auxinfo = ""
     calc_key = ""
     calc_xkey = ""
